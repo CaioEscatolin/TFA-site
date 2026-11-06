@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil | Tech For All</title>
+    <link rel="stylesheet" href="sabores.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="img/icone_acessibilidade_16x16.png">
+    <style>
+        .perfil-wrap { max-width: 860px; margin: 0 auto; padding: 0 1rem; }
+        .cartao {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 28px; margin-bottom: 22px;
+        }
+        .cartao h3 { margin-bottom: 14px; color: #1e293b; }
+        .linha { display: flex; justify-content: space-between; gap: 1rem;
+                 padding: 10px 0; border-bottom: 1px dashed #e2e8f0; font-size: .95rem; }
+        .linha:last-child { border-bottom: none; }
+        .linha span:first-child { color: #64748b; }
+        .linha span:last-child { font-weight: 600; color: #1e293b; text-align: right; }
+        .tag { display: inline-block; background: #eef2ff; color: #4169E1;
+               border-radius: 999px; padding: 3px 11px; font-size: .78rem;
+               margin: 2px 4px 2px 0; }
+        .vazio { color: #64748b; font-size: .95rem; }
+        .form-edicao { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .form-edicao input {
+            flex: 1 1 240px; padding: 11px 13px; border: 1px solid #cbd5e1;
+            border-radius: 8px; font-size: .95rem; font-family: inherit;
+        }
+        .form-edicao button {
+            padding: 11px 20px; border: none; border-radius: 8px; cursor: pointer;
+            background: #4169E1; color: #fff; font-weight: 600; font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><h1><i class="fas fa-universal-access"></i> Tech For All</h1></div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="index.html#sobre">Sobre</a></li>
+            <li><a href="pesquisa.html">Formulário</a></li>
+            <li><a href="extensoes.html">Extensões</a></li>
+            <li><a href="cadastro.html" id="link-login">Login</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="secao">
+    <div class="perfil-wrap">
+        <div class="titulo-secao" style="text-align:left;">
+            <h2 id="saudacao">Carregando...</h2>
+            <p>Seus dados ficam salvos e acompanham você em qualquer dispositivo.</p>
+        </div>
+
+        <div class="cartao">
+            <h3><i class="fas fa-id-card"></i> Dados da conta</h3>
+            <div class="linha"><span>Nome</span><span id="p-nome">—</span></div>
+            <div class="linha"><span>E-mail</span><span id="p-email">—</span></div>
+            <div class="linha"><span>Conta criada em</span><span id="p-criado">—</span></div>
+            <div class="linha"><span>Último acesso</span><span id="p-login">—</span></div>
+            <div class="linha"><span>ID do usuário</span><span id="p-uid" style="font-size:.75rem;">—</span></div>
+
+            <div class="form-edicao">
+                <input type="text" id="novo-nome" placeholder="Atualizar meu nome">
+                <button id="btn-salvar-nome">Salvar</button>
+            </div>
+        </div>
+
+        <div class="cartao">
+            <h3><i class="fas fa-clipboard-list"></i> Minhas respostas do formulário</h3>
+            <div id="lista-respostas" class="vazio">Carregando...</div>
+        </div>
+    </div>
+</section>
+
+<footer id="contato">
+    <p><strong>Tech For All</strong> — Tecnologia Assistiva &copy; 2026</p>
+</footer>
+
+<script type="module">
+    import { auth, db } from "./js/firebase-config.js";
+    import { exigirLogin, montarMenuUsuario, carregarPerfil } from "./js/auth.js";
+    import { updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+        collection, query, orderBy, getDocs, doc, updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    montarMenuUsuario();
+    const user = await exigirLogin();
+
+    const fmt = (ts) => ts?.toDate
+        ? ts.toDate().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })
+        : "—";
+
+    // ---------- perfil ----------
+    const perfil = await carregarPerfil(user.uid);
+    document.getElementById("saudacao").textContent =
+        "Olá, " + (perfil?.nome || user.email).split(" ")[0] + "!";
+    document.getElementById("p-nome").textContent   = perfil?.nome || "—";
+    document.getElementById("p-email").textContent  = user.email;
+    document.getElementById("p-criado").textContent = fmt(perfil?.criadoEm);
+    document.getElementById("p-login").textContent  = fmt(perfil?.ultimoLogin);
+    document.getElementById("p-uid").textContent    = user.uid;
+
+    document.getElementById("btn-salvar-nome").addEventListener("click", async () => {
+        const nome = document.getElementById("novo-nome").value.trim();
+        if (!nome) return;
+        await updateDoc(doc(db, "usuarios", user.uid), { nome });
+        await updateProfile(auth.currentUser, { displayName: nome });
+        document.getElementById("p-nome").textContent = nome;
+        document.getElementById("saudacao").textContent = "Olá, " + nome.split(" ")[0] + "!";
+        document.getElementById("novo-nome").value = "";
+    });
+
+    // ---------- respostas salvas ----------
+    const alvo = document.getElementById("lista-respostas");
+    const snap = await getDocs(query(
+        collection(db, "usuarios", user.uid, "respostas"),
+        orderBy("enviadoEm", "desc")
+    ));
+
+    if (snap.empty) {
+        alvo.innerHTML = 'Você ainda não respondeu o formulário. ' +
+            '<a href="pesquisa.html" style="color:#4169E1;font-weight:600;">Responder agora</a>';
+    } else {
+        alvo.classList.remove("vazio");
+        alvo.innerHTML = snap.docs.map(d => {
+            const r = d.data();
+            const tags = (arr) => (arr?.length
+                ? arr.map(v => '<span class="tag">' + v + '</span>').join("")
+                : "—");
+            return '<div class="linha" style="display:block;">' +
+                '<p style="color:#64748b;font-size:.8rem;margin-bottom:8px;">Enviado em ' + fmt(r.enviadoEm) + '</p>' +
+                '<p><strong>Idade:</strong> ' + (r.idade ?? "—") + '</p>' +
+                '<p style="margin-top:6px;"><strong>Deficiências:</strong> ' + tags(r.deficiencias) + '</p>' +
+                '<p style="margin-top:6px;"><strong>Usos da internet:</strong> ' + tags(r.usos) + '</p>' +
+                '<p style="margin-top:6px;"><strong>Dispositivos:</strong> ' + tags(r.dispositivos) + '</p>' +
+                '<p style="margin-top:6px;"><strong>Dificuldades:</strong> ' + (r.dificuldade || "—") + '</p>' +
+            '</div>';
+        }).join("");
+    }
+</script>
+
+</body>
+</html>
