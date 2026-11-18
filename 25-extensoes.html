@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extensões de Acessibilidade | Tech For All</title>
+    <link rel="stylesheet" href="sabores.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="img/icone_acessibilidade_16x16.png">
+    <style>
+        .card .icone-ext {
+            font-size: 3.2rem;
+            color: var(--azul-royal);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .card .versao {
+            display: block;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+        }
+        .card .requisito {
+            display: block;
+            font-size: 0.85rem;
+            color: #444;
+            margin-top: 0.6rem;
+        }
+        .passos {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: left;
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .passos ol {
+            padding-left: 1.4rem;
+            line-height: 1.9;
+        }
+        .passos code {
+            background: #eef2f9;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        .aviso-desktop {
+            max-width: 700px;
+            margin: 1.5rem auto 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1><i class="fas fa-universal-access"></i> Tech For All </h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="index.html#sobre">Sobre</a></li>
+                <li><a href="pesquisa.html">Formulário</a></li>
+                <li><a href="extensoes.html" style="color: var(--azul-royal);">Extensões</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li><a href="cadastro.html" id="link-login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="secao" id="extensoes">
+        <div class="titulo-secao">
+            <span class="subtitulo">Downloads Disponíveis</span>
+            <h2>Ferramentas de Acessibilidade</h2>
+            <p>Escolha a extensão ideal para você e baixe gratuitamente.</p>
+        </div>
+
+        <div class="grid-produtos">
+            <div class="card">
+                <i class="fas fa-microphone icone-ext" aria-hidden="true"></i>
+                <h3>Controle por Voz</h3>
+                <span class="versao">Versão 2.2.0</span>
+                <p><strong>O que faz:</strong> Controla o Chrome por comandos de voz: navegação, abas, mídia, formulários e muito mais.</p>
+                <span class="requisito"><i class="fas fa-microphone-alt"></i> Precisa de microfone. Indicada para deficiência motora.</span>
+                <br>
+                <a href="extensoes/controle-voz.zip" class="btn" download><i class="fas fa-download"></i> Download</a>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-eye icone-ext" aria-hidden="true"></i>
+                <h3>OlhoLivre – Controle pelo Olhar</h3>
+                <span class="versao">Versão 1.3.0</span>
+                <p><strong>O que faz:</strong> Permite navegar usando apenas os olhos: cursor pelo olhar, clique por permanência e rolagem pelas bordas da tela.</p>
+                <span class="requisito"><i class="fas fa-video"></i> Precisa de câmera. Indicada para deficiência motora severa.</span>
+                <br>
+                <a href="extensoes/olholivre.zip" class="btn" download><i class="fas fa-download"></i> Download</a>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-search-plus icone-ext" aria-hidden="true"></i>
+                <h3>Lupa Digital</h3>
+                <span class="versao">Versão 1.0.0</span>
+                <p><strong>O que faz:</strong> Lupa flutuante com zoom ampliado em qualquer palavra ou trecho da página, fácil de mostrar, esconder e mover.</p>
+                <span class="requisito"><i class="fas fa-low-vision"></i> Indicada para baixa visão.</span>
+                <br>
+                <a href="extensoes/lupa-digital.zip" class="btn" download><i class="fas fa-download"></i> Download</a>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-brain icone-ext" aria-hidden="true"></i>
+                <h3>Kit de Acessibilidade TFA</h3>
+                <span class="versao">Versão 4.0</span>
+                <p><strong>O que faz:</strong> Leitura de texto em voz alta, cor da fonte, marca-texto, tema escuro, troca de fonte, zoom, modo leitura e modo dislexia.</p>
+                <span class="requisito"><i class="fas fa-universal-access"></i> Conforto visual e apoio para TDAH e dislexia.</span>
+                <br>
+                <a href="extensoes/kit-acessibilidade-tfa.zip" class="btn" download><i class="fas fa-download"></i> Download</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="secao" id="como-instalar" style="padding-top: 0;">
+        <div class="titulo-secao">
+            <span class="subtitulo">Passo a passo</span>
+            <h2>Como instalar</h2>
+        </div>
+        <div class="passos">
+            <ol>
+                <li>Clique em <strong>Download</strong> na extensão escolhida e salve o arquivo <code>.zip</code>.</li>
+                <li>Extraia o conteúdo do arquivo (descompacte a pasta).</li>
+                <li>No Chrome, digite <code>chrome://extensions</code> na barra de endereço e pressione Enter.</li>
+                <li>Ative o <strong>Modo do desenvolvedor</strong> no canto superior direito.</li>
+                <li>Clique em <strong>Carregar sem compactação</strong> e selecione a pasta extraída.</li>
+                <li>Pronto! O ícone da extensão aparece na barra do navegador e já pode ser usada.</li>
+            </ol>
+        </div>
+        <p class="aviso-desktop">As extensões funcionam no navegador Chrome de computador (Windows, Mac ou Linux).</p>
+    </section>
+
+    <footer id="contato">
+        <div class="social-icons">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <p><strong>Tech for all</strong> - Tecnologia Assistiva</p>
+        <p>A democratizar a web para todos.</p>
+        <p style="margin-top: 1rem; font-size: 0.8rem;">&copy; 2026 Todos os direitos reservados.</p>
+    </footer>
+
+<script type="module">
+    import { montarMenuUsuario } from "./js/auth.js";
+    montarMenuUsuario();
+</script>
+
+</body>
+</html>
